@@ -91,6 +91,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.jar.Manifest;
 
 @SuppressWarnings("deprecation")
 public class Deduplicator {
@@ -147,7 +148,7 @@ public class Deduplicator {
 
         }
     }
-    
+
     private static void forbidClass(Class c) {
         SHOULD_PROCESS_CLASS.put(c, false);
     }
@@ -826,6 +827,8 @@ public class Deduplicator {
                                 // System.out.println("-" + Strings.repeat("-", recursion) + "* " + f.getName());
                                 Object value = methodHandles[i].invoke(obj);
                                 Object valueD = deduplicateObject(value, recursion + 1);
+
+                                if (valueD instanceof Manifest) continue;
 
                                 if (valueD != null) {
                                     if (valueD != value) {
